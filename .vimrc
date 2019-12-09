@@ -19,10 +19,11 @@
 
 " General Settings
 set relativenumber
-set cc =80
+set cc =180
 syntax on
 set undofile
 set undodir=~/padmabl/.vim/undo
+" Color schemes
 set t_Co=256
 filetype on
 filetype indent on
@@ -32,6 +33,10 @@ set clipboard=unnamedplus
 " 	source ~/.vim/.vimrc.plug
 " endif
 call plug#begin('~/.vim/plugged')
+  Plug 'srcery-colors/srcery-vim'
+  Plug 'lucasprag/simpleblack' 
+  Plug 'godlygeek/tabular'
+  Plug 'plasticboy/vim-markdown' 
   "Plug 'itchyny/lightline.vim'
   Plug 'dense-analysis/ale'
   Plug 'Chiel92/vim-autoformat'
@@ -46,6 +51,7 @@ call plug#begin('~/.vim/plugged')
   "Plug 'lervag/vimtex'
 call plug#end()
 
+colorscheme srcery 
 " My Leader !!
 let mapleader = "e"
 let maplocalleader = "z"
@@ -83,7 +89,7 @@ let g:pymode_python = 'python3'
 let g:pymode = 1
 let g:pymode_indent =1
 let g:pymode_trim_whitespaces = 1
-let g:pymode_options_max_line_length = 480
+let g:pymode_options_max_line_length =800 
 let g:pymode_preview_height = &previewheight
 let g:pymode_options = 1
 " Python Auto completor Completor.vim
@@ -92,6 +98,9 @@ let g:pymode_options = 1
 " ALE options and configuration
 let g:ale_sign_error = '--'
 let g:ale_sign_warning = '..'
+let b:ale_fixers={'cpp':'clangtidy'}
+
+" Airline options
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#formatter = 'default'
 
@@ -108,4 +117,11 @@ let g:airline#extensions#tabline#formatter = 'default'
 :map <Leader>9 :buffer 9<CR>
 :map <Leader>10 :buffer 10<CR>
 :map <Leader>11 :buffer 11<CR>
+:map <Leader>l :buffers<CR>
+
+" Mark down setup
+let g:vim_markdown_new_list_item_indent = 2
+let g:vim_markdown_strikethrough = 1
+let g:vim_markdown_math = 1
+set conceallevel=2
 
