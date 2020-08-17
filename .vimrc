@@ -15,28 +15,37 @@
 " and configure vim to your own liking!
 
 " let mapleader =","
-" set nocompatible
+set nocompatible
 
 " General Settings
 set relativenumber
 set cc =180
 syntax on
-set undofile
-set undodir=~/padmabl/.vim/undo
 " Color schemes
 set t_Co=256
 filetype on
 filetype indent on
 filetype plugin on
 set clipboard=unnamedplus
+" On pressing tab, insert 2 spaces
+" set expandtab
+" show existing tab with 2 spaces width
+" set tabstop=2
+" set softtabstop=2
+" when indenting with '>', use 2 spaces width
+" set shiftwidth=2
 " if filereadable(expand("~/.vim/.vimrc.plug"))
-" 	source ~/.vim/.vimrc.plug
+"       source ~/.vim/.vimrc.plug
 " endif
 call plug#begin('~/.vim/plugged')
+  Plug 'tpope/vim-fugitive'
+  Plug 'chrisbra/vim-diff-enhanced'  
   Plug 'srcery-colors/srcery-vim'
   Plug 'lucasprag/simpleblack' 
   Plug 'godlygeek/tabular'
+  "Plug 'vimwiki/vimwiki'
   Plug 'plasticboy/vim-markdown' 
+  Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
   "Plug 'itchyny/lightline.vim'
   Plug 'dense-analysis/ale'
   Plug 'Chiel92/vim-autoformat'
@@ -47,14 +56,18 @@ call plug#begin('~/.vim/plugged')
   " Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  "Plug 'xuhdev/vim-latex-live-preview'
-  "Plug 'lervag/vimtex'
+  " Plug 'xuhdev/vim-latex-live-preview'
+  Plug 'lervag/vimtex'
+  Plug 'dpelle/vim-LanguageTool'
+  " Plug 'rhysd/vim-grammarous'
+  "Plug 'SirVer/ultisnips'
+  Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
 call plug#end()
 
 colorscheme srcery 
 " My Leader !!
 let mapleader = "e"
-let maplocalleader = "z"
+let maplocalleader = "b"
 
 " Key mapping for vim-autoformat
 autocmd FileType python nnoremap <LocalLeader>= :0,$!yapf<CR>
@@ -75,8 +88,9 @@ let g:NERDCompactSexyComs = 1
 
 " USEFUL KEY MAPPINGS
 :inoremap qq <Esc>
-:map aa :w<CR>
-" For Pio to run
+:map ss :w<CR>
+
+" ForPio to run
 :map <LocalLeader>q :! clear && pio run<Enter> 
 :map <LocalLeader>w :! clear && pio run -t upload<Enter> 
 " For window change
@@ -84,6 +98,10 @@ let g:NERDCompactSexyComs = 1
 :map <LocalLeader>j <C-w>j
 :map <LocalLeader>k <C-w>k
 :map <LocalLeader>l <C-w>l
+
+" VIM completion shortcut
+:inoremap <LocalLeader>3  <C-x><C-o>
+
 "Python completor for python 3
 let g:pymode_python = 'python3'
 let g:pymode = 1
@@ -125,3 +143,54 @@ let g:vim_markdown_strikethrough = 1
 let g:vim_markdown_math = 1
 set conceallevel=2
 
+" Notes mapping
+:nnoremap <Leader>nl :e $NOTES_DIR/index.md<CR>cd $Notes_DIR
+
+" Markdown settings
+" let g:mkdp_refresh_slow=1
+let g:mkdp_markdown_css='/home/padmabl/Myconfigs/github-markdown.css'
+autocmd FileType markdown normal zR
+
+" Started In Diff-Mode set diffexpr (plugin not loaded yet)
+if &diff
+    let &diffexpr='EnhancedDiff#Diff("git diff", "--diff-algorithm=patience")'
+endif
+
+" Gutentags for vim
+" set statusline+=%{gutentags#statusline()}
+
+" LATEX configurations
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
+
+" Snippet configurations
+"let g:UltiSnipsExpandTrigger = '<tab>'
+"let g:UltiSnipsJumpForwardTrigger = '<c-b>'
+"let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
+
+" Grammarous check config
+" let g:grammarous#languagetool_cmd = 'languagetool'
+" :nmap <F5> (grammarous-move-to-next-error)
+" :nmap <F6> (grammarous-open-info-window)
+
+" Language tool
+let g:languagetool_jar='/home/padmabl/.vim/plugged/vim-grammarous/misc/LanguageTool-5.0/languagetool-commandline.jar'
+
+" shortcuts for latex
+autocmd FileType tex inoremap ;bf \textbf{}<Space><Esc>T{i 
+autocmd FileType tex inoremap ;it \textit{}<Space><Esc>T{i 
+autocmd FileType tex inoremap ;s \section{}<Space><Esc>T{i 
+autocmd FileType tex inoremap ;ch \chapter{}<Space><Esc>T{i 
+autocmd FileType tex inoremap ;r \re{}<Space><Esc>T{i 
+autocmd FileType tex inoremap ;su \subfile{}<Space><Esc>T{i 
+autocmd FileType tex inoremap ;l \label{}<Space><Esc>T{i 
+autocmd FileType tex inoremap ;c \caption{}<Space><Esc>T{i 
+
+" Latex environments
+autocmd FileType tex inoremap ;fg \begin{figure}[h!]<CR>\caption{}<CR>\label{}<CR>\includegraphics[width=\linewidth]{}\end{figure}<Esc>2k
+autocmd FileType tex inoremap ;em \begin{}<CR><CR>\end{} 
+autocmd FileType tex inoremap ;ta \begin{table}[h!]<CR>\caption{}<CR>\label{}<CR>\end{table}<Esc>2k
+autocmd FileType tex inoremap ;tb \begin{tabular}{p{1cm}p{5cm}}<CR><CR>\end{tabular}<Esc>2k
